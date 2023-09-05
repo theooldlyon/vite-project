@@ -70,7 +70,6 @@ input {
 }
 
 .childDiv {
-	text-align: center;
 	background-color: transparent;
 	border: 1px solid var(--secondary-color);
 	padding: 10px;
@@ -143,9 +142,6 @@ a {
 }
 
 @media screen and (max-width: 480px) {
-	#main {
-		text.align: center;
-	}
 	.infoBtn {
 		background-color: transparent;
 		color: var(--secondary-color);
