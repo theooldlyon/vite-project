@@ -58,6 +58,7 @@ input {
 	border-radius: 8px;
 	width: 15vw;
 	color: var(--main-color);
+	text-align: center;
 }
 
 .interactBtn:hover {

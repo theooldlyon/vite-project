@@ -113,17 +113,19 @@ mintBtn.addEventListener("click", async () => {
 });
 
 async function mint(mintFunctionName, price) {
+	const amount = quantityValue.value;
+	const ethAmount = amount * (price.toString() / 1e18);
 	try {
 		mintResult.textContent = "Minting...";
 		mintBtn.style.display = "none";
-		const ethAmount = quantityValue.value * price.toString();
+
 		const { request } = await prepareWriteContract({
 			address: contractAddress,
 			abi: contractAbi,
 			functionName: mintFunctionName,
-			args: [quantityValue.value],
+			args: [amount],
 			chainId: 11155111,
-			value: ethAmount,
+			value: parseEther(ethAmount.toString()),
 		});
 		const { hash } = await writeContract(request);
 		const data = await waitForTransaction({ chainId: 11155111, hash });
@@ -133,7 +135,6 @@ async function mint(mintFunctionName, price) {
 			"Minted Succefully, click here to see your Transaction";
 		mintResult.href = `https://sepolia.etherscan.io/tx/${data.transactionHash}`;
 	} catch (error) {
-		console.log(error);
 		mintResult.textContent =
 			"Couldn't mint your tokens , check the console for more info!";
 	}
