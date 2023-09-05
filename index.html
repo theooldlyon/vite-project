@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Mint Website</title>
+		
+		<script type="module" crossorigin src="/vite-project/assets/index-c403de0a.js"></script>
+		<link rel="stylesheet" href="/vite-project/assets/index-2242cf55.css">
+	</head>
+
+	<body>
+		<div id="menu">
+			<nav class="nav-menu">
+				<ul>
+					<li><w3m-core-button></w3m-core-button></li>
+					<li>
+						<a
+							href="https://sepolia.etherscan.io/address/0x0acd6c79d074cd0bf50ca34bd59ffc449950a0f7"
+							target="_blank"
+							><img src="/vite-project/assets/etherscan-logo-light-48f6b344.png" width="100px"
+						/></a>
+					</li>
+					<!-- <li>
+						<a href="#" target="_blank"
+							><img src="/logo-white.png" width="20px"
+						/></a>
+					</li> -->
+				</ul>
+			</nav>
+		</div>
+		<div id="main">
+			<h1 style="text-align: center">MINT YOUR NFT</h1>
+
+			<br />
+			<div id="salesInfo" class="childDiv">
+				<h3>Mint Phase:</h3>
+				<h4 id="mintPhase"></h4>
+				<h3>Public Price:</h3>
+				<h4 id="publicPrice"></h4>
+				<h3>Whitelist Price:</h3>
+				<h4 id="whitelistPrice"></h4>
+			</div>
+
+			<div id="mintDiv" class="childDiv">
+				<h5>Select quantity:</h5>
+				<div id="quantityDiv">
+					<button class="quantityBtn" id="decrementButton">-</button>
+					<input
+						class="quantityInput"
+						type="number"
+						name="number"
+						id="quantity"
+						min="1"
+						value="1"
+						readonly
+					/>
+					<button class="quantityBtn" id="incrementButton">+</button>
+				</div>
+				<br />
+				<br />
+				<button class="interactBtn" id="mintButton" style="display: none">
+					Mint Now
+				</button>
+				<w3m-core-button id="bottomCoreeButton"></w3m-core-button>
+
+				<a id="mintResult"></a>
+			</div>
+			<br />
+		</div>
+
+		
+	</body>
+</html>
