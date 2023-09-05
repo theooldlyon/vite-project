@@ -53,14 +53,12 @@ input {
 	background-color: var(--third-color);
 	font-weight: bolder;
 	border: 1px solid var(--main-color);
-	padding-left: 35px;
 	padding: 16px;
 	font-size: 15px;
 	border-radius: 8px;
 	width: 15vw;
 	color: var(--main-color);
 	text-align: center;
-	font-size: 23px;
 }
 
 .interactBtn:hover {
@@ -70,6 +68,7 @@ input {
 }
 
 .childDiv {
+	text-align: center;
 	background-color: transparent;
 	border: 1px solid var(--secondary-color);
 	padding: 10px;
@@ -94,7 +93,6 @@ input {
 
 #menu {
 	margin-top: 3vh;
-	text-align: center;
 }
 
 .nav-menu ul {
@@ -124,12 +122,8 @@ a {
 
 /* Media Queries */
 @media screen and (max-width: 850px) {
-	#main {
-		text.align: center;
-	}
 	.childDiv {
 		margin-left: 28.5%;
-		text.align: center;
 	}
 	.infoBtn {
 		background-color: transparent;
@@ -142,6 +136,9 @@ a {
 }
 
 @media screen and (max-width: 480px) {
+	.childDiv {
+		margin-left: 26%;
+	}
 	.infoBtn {
 		background-color: transparent;
 		color: var(--secondary-color);
@@ -151,17 +148,17 @@ a {
 		border-radius: 8px;
 	}
 
-	.interactBtn {
-		width: 20vw;
-		font-size: 15px;
-		text-align: center;
-	}
-
 	#quantityDiv {
 		display: flex;
 		text-align: center;
 	}
 	input {
+		width: 8vw;
+	}
+
+	.interactBtn {
 		width: 20vw;
+		font-size: 15px;
+		text-align: center;
 	}
 }
