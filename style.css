@@ -10,6 +10,14 @@ body {
 	font-family: "Raleway", sans-serif;
 	background-color: var(--main-color);
 	color: var(--secondary-color);
+	display: flex;
+	flex-direction: column;
+}
+
+@media screen and (max-width: 600px) {
+	body {
+		flex-direction: column-reverse;
+	}
 }
 
 h4 {
@@ -164,5 +172,8 @@ a {
 	}
 	#main {
 		margin-top: 2vh;
+	}
+	#menu {
+		margin-top: 5vw;
 	}
 }
