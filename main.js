@@ -1,12 +1,7 @@
-import {
-	EthereumClient,
-	w3mConnectors,
-	w3mProvider,
-} from "@web3modal/ethereum";
+import { EthereumClient, w3mConnectors } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/html";
 import {
 	configureChains,
-	connect,
 	createConfig,
 	prepareWriteContract,
 } from "@wagmi/core";
@@ -69,9 +64,9 @@ window.onload = async () => {
 		abi: contractAbi,
 		functionName: "getWhitelistPrice",
 	});
-	mintPhase.textContent = actualMintPhase;
-	publicPrice.textContent = actualPublicPrice.toString() / 1e18 + " Ξ";
-	whitelistPrice.textContent = actualWhitelistPrice.toString() / 1e18 + " Ξ";
+	mintPhase.innerText = actualMintPhase;
+	publicPrice.innerText = actualPublicPrice.toString() / 1e18 + " Ξ";
+	whitelistPrice.innerText = actualWhitelistPrice.toString() / 1e18 + " Ξ";
 };
 
 incrementBtn.addEventListener("click", () => {
@@ -95,20 +90,22 @@ const unwatch = watchAccount((account) => {
 	if (account.status == "connected") {
 		bottomCoreBtn.style.display = "none";
 		mintBtn.style.display = "";
+		mintResult.innerText = "";
 	} else if (account.status == "disconnected") {
 		mintBtn.style.display = "none";
 		bottomCoreBtn.style.display = "";
+		mintResult.innerText = "";
 	}
 });
 
 mintBtn.addEventListener("click", async () => {
 	if (actualMintPhase == "PUBLIC") {
 		await mint("publicMint", actualPublicPrice);
-	} else if (actualMintPhase == "ONLY_WHITELIST") {
+	} else if (actualMintPhase == "ONLY WHITELIST MEMBERS") {
 		await mint("whitelistMint", actualWhitelistPrice);
 	} else if (actualMintPhase == "CLOSED") {
 		mintBtn.style.display = "none";
-		mintResult.textContent = "Mint is Closed :(";
+		mintResult.innerText = "Mint is Closed :(";
 	}
 });
 
@@ -116,7 +113,7 @@ async function mint(mintFunctionName, price) {
 	const amount = quantityValue.value;
 	const ethAmount = amount * (price.toString() / 1e18);
 	try {
-		mintResult.textContent = "Minting...";
+		mintResult.innerText = "Minting...";
 		mintBtn.style.display = "none";
 
 		const { request } = await prepareWriteContract({
@@ -135,8 +132,8 @@ async function mint(mintFunctionName, price) {
 		});
 
 		console.log(data);
-		mintResult.textContent =
-			"Minted with success! \nClick here to view your transaction";
+		mintResult.innerText =
+			"Minted with success!\n\nClick here to view your transaction";
 		mintResult.href = `https://sepolia.etherscan.io/tx/${data.transactionHash}`;
 	} catch (error) {
 		console.log(error);
@@ -146,22 +143,25 @@ async function mint(mintFunctionName, price) {
 
 function handleError(error) {
 	if (error.message.includes("InsufficientAmount")) {
-		mintResult.textContent =
-			"Couldn't mint your tokens, you need to send more ETH!";
+		mintResult.innerText =
+			"Couldn't mint your tokens!\n\nYou need to send more ETH!";
 	} else if (error.message.includes("TotalSupplyReached")) {
-		mintResult.textContent = "Couldn't mint your tokens, max supply reached";
+		mintResult.innerText = "Couldn't mint your tokens!\n\nMax supply reached";
 	} else if (error.message.includes("MaxMintableReached")) {
-		mintResult.textContent =
-			"Couldn't mint your tokens, quantity exceeds the mint limit!";
+		mintResult.innerText =
+			"Couldn't mint your tokens!\n\nQuantity exceeds the mint limit!";
 	} else if (error.message.includes("OnlyWhitelistMembersAllowed")) {
-		mintResult.textContent =
-			"Couldn't mint your tokens, you're not in the whitelist!";
+		mintResult.innerText =
+			"Couldn't mint your tokens!\n\nYou're not in the whitelist!";
 	} else if (error.message.includes("NFT__BlackListMembersArentAllowed")) {
-		mintResult.textContent =
+		mintResult.innerText =
 			"Couldn't mint your tokens, your account is blacklisted!";
 	} else if (error.message.includes("User denied transaction signature")) {
-		mintResult.textContent = "User denied transaction signature";
+		mintResult.innerText = "User denied transaction signature";
+	} else if (error.message.includes("exceeds the balance of the account")) {
+		mintResult.innerText =
+			"Couldn't mint your tokens!\n\nYour account does not have enough funds to submit the transaction!";
 	} else {
-		mintResult.textContent = "Couldn't mint your tokens, something went wrong";
+		mintResult.innerText = "Couldn't mint your tokens!\n\nSomething went wrong";
 	}
 }
