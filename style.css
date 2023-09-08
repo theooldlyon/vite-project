@@ -125,8 +125,10 @@ input {
 }
 
 a {
+	font-size: bolder;
 	text-decoration: none;
 	color: var(--third-color);
+	text-align: center;
 }
 
 /* Media Queries */

@@ -1,4 +1,4 @@
-export const contractAddress = "0x0aCD6c79D074Cd0Bf50ca34bD59FFC449950A0f7";
+export const contractAddress = "0x2dd49ce28266EF4A41e210a0E991a6b37866744E";
 export const contractAbi = [
 	{
 		inputs: [
@@ -7,7 +7,7 @@ export const contractAbi = [
 			{ internalType: "uint8", name: "_devFee", type: "uint8" },
 			{ internalType: "uint72", name: "_whitelistPrice", type: "uint72" },
 			{ internalType: "uint80", name: "_publicPrice", type: "uint80" },
-			{ internalType: "uint88", name: "_totalSupply", type: "uint88" },
+			{ internalType: "uint88", name: "_maxSupply", type: "uint88" },
 		],
 		stateMutability: "nonpayable",
 		type: "constructor",
@@ -22,12 +22,13 @@ export const contractAbi = [
 	{ inputs: [], name: "NFT__BlackListMembersArentAllowed", type: "error" },
 	{ inputs: [], name: "NFT__CantWithdrawZero", type: "error" },
 	{ inputs: [], name: "NFT__DevCantBeBlacklisted", type: "error" },
+	{ inputs: [], name: "NFT__ImpossibleToSendFeeToDev", type: "error" },
 	{ inputs: [], name: "NFT__InsufficientAmount", type: "error" },
 	{ inputs: [], name: "NFT__MaxMintableReached", type: "error" },
 	{ inputs: [], name: "NFT__NotAllowedToMint", type: "error" },
 	{ inputs: [], name: "NFT__OnlyWhitelistMembersAllowed", type: "error" },
 	{ inputs: [], name: "NFT__TotalSupplyReached", type: "error" },
-	{ inputs: [], name: "NFT__WithdrawalFailed", type: "error" },
+	{ inputs: [], name: "NFT__WithdrawlFailed", type: "error" },
 	{ inputs: [], name: "OwnerQueryForNonexistentToken", type: "error" },
 	{ inputs: [], name: "OwnershipNotInitializedForExtraData", type: "error" },
 	{ inputs: [], name: "TransferCallerNotOwnerNorApproved", type: "error" },
@@ -46,7 +47,7 @@ export const contractAbi = [
 				type: "uint256",
 			},
 		],
-		name: "AirdropSuccessfull",
+		name: "Airdrop",
 		type: "event",
 	},
 	{
@@ -94,7 +95,59 @@ export const contractAbi = [
 		name: "ApprovalForAll",
 		type: "event",
 	},
-	{ anonymous: false, inputs: [], name: "BaseURIChanged", type: "event" },
+	{ anonymous: false, inputs: [], name: "Changed__BaseURI", type: "event" },
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: false,
+				internalType: "uint88",
+				name: "newTotalSupply",
+				type: "uint88",
+			},
+		],
+		name: "Changed__MaxSupply",
+		type: "event",
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: false,
+				internalType: "string",
+				name: "mintPhase",
+				type: "string",
+			},
+		],
+		name: "Changed__MintPhase",
+		type: "event",
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: false,
+				internalType: "uint80",
+				name: "newPrice",
+				type: "uint80",
+			},
+		],
+		name: "Changed__PublicPrice",
+		type: "event",
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: false,
+				internalType: "uint72",
+				name: "newPrice",
+				type: "uint72",
+			},
+		],
+		name: "Changed__WhitelistPrice",
+		type: "event",
+	},
 	{
 		anonymous: false,
 		inputs: [
@@ -119,20 +172,6 @@ export const contractAbi = [
 	{
 		anonymous: false,
 		inputs: [
-			{ indexed: true, internalType: "address", name: "to", type: "address" },
-			{
-				indexed: false,
-				internalType: "uint256",
-				name: "quantity",
-				type: "uint256",
-			},
-		],
-		name: "MintedSuccessfully",
-		type: "event",
-	},
-	{
-		anonymous: false,
-		inputs: [
 			{
 				indexed: true,
 				internalType: "address",
@@ -152,40 +191,15 @@ export const contractAbi = [
 	{
 		anonymous: false,
 		inputs: [
+			{ indexed: true, internalType: "address", name: "to", type: "address" },
 			{
 				indexed: false,
-				internalType: "string",
-				name: "mintPhase",
-				type: "string",
+				internalType: "uint256",
+				name: "quantity",
+				type: "uint256",
 			},
 		],
-		name: "PhaseChanged",
-		type: "event",
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: false,
-				internalType: "uint80",
-				name: "newPrice",
-				type: "uint80",
-			},
-		],
-		name: "PublicPrice_Changed",
-		type: "event",
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: false,
-				internalType: "uint88",
-				name: "newTotalSupply",
-				type: "uint88",
-			},
-		],
-		name: "TotalSupply_Chaned",
+		name: "PublicMint",
 		type: "event",
 	},
 	{
@@ -214,20 +228,7 @@ export const contractAbi = [
 				type: "uint256",
 			},
 		],
-		name: "WhitelistMintSuccessfull",
-		type: "event",
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: false,
-				internalType: "uint72",
-				name: "newPrice",
-				type: "uint72",
-			},
-		],
-		name: "WhitelistPrice_Changed",
+		name: "WhitelistMint",
 		type: "event",
 	},
 	{
@@ -241,7 +242,7 @@ export const contractAbi = [
 				type: "uint256",
 			},
 		],
-		name: "WithdrawnSucessful",
+		name: "WithdrawnTo",
 		type: "event",
 	},
 	{
@@ -315,13 +316,6 @@ export const contractAbi = [
 	},
 	{
 		inputs: [],
-		name: "getTotalSupply",
-		outputs: [{ internalType: "uint88", name: "", type: "uint88" }],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [],
 		name: "getWhitelistMintsLimit",
 		outputs: [{ internalType: "uint8", name: "", type: "uint8" }],
 		stateMutability: "view",
@@ -360,8 +354,22 @@ export const contractAbi = [
 	},
 	{
 		inputs: [],
+		name: "maxSupply",
+		outputs: [{ internalType: "uint88", name: "", type: "uint88" }],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
+		inputs: [],
 		name: "name",
 		outputs: [{ internalType: "string", name: "", type: "string" }],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
+		inputs: [],
+		name: "notYetMinted",
+		outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
 		stateMutability: "view",
 		type: "function",
 	},
@@ -420,7 +428,7 @@ export const contractAbi = [
 			{ internalType: "uint8", name: "publicMintsLimit", type: "uint8" },
 			{ internalType: "uint72", name: "whitelistPrice", type: "uint72" },
 			{ internalType: "uint80", name: "publicPrice", type: "uint80" },
-			{ internalType: "uint88", name: "totalSupply", type: "uint88" },
+			{ internalType: "uint88", name: "maxSupply", type: "uint88" },
 		],
 		stateMutability: "view",
 		type: "function",
@@ -479,6 +487,13 @@ export const contractAbi = [
 		type: "function",
 	},
 	{
+		inputs: [{ internalType: "uint88", name: "_newMaxSupply", type: "uint88" }],
+		name: "setNewMaxSupply",
+		outputs: [],
+		stateMutability: "nonpayable",
+		type: "function",
+	},
+	{
 		inputs: [{ internalType: "uint8", name: "_newLimit", type: "uint8" }],
 		name: "setPublicMintsLimit",
 		outputs: [],
@@ -488,15 +503,6 @@ export const contractAbi = [
 	{
 		inputs: [{ internalType: "uint80", name: "_newPrice", type: "uint80" }],
 		name: "setPublicPrice",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{ internalType: "uint88", name: "_newTotalSupply", type: "uint88" },
-		],
-		name: "setTotalSupply",
 		outputs: [],
 		stateMutability: "nonpayable",
 		type: "function",

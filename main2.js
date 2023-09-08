@@ -128,14 +128,40 @@ async function mint(mintFunctionName, price) {
 			value: parseEther(ethAmount.toString()),
 		});
 		const { hash } = await writeContract(request);
-		const data = await waitForTransaction({ chainId: 11155111, hash });
+		const data = await waitForTransaction({
+			confirmations: 3,
+			chainId: 11155111,
+			hash,
+		});
 
 		console.log(data);
 		mintResult.textContent =
-			"Minted Succefully, click here to see your Transaction";
+			"Minted with success! \nClick here to view your transaction";
 		mintResult.href = `https://sepolia.etherscan.io/tx/${data.transactionHash}`;
 	} catch (error) {
+		console.log(error);
+		handleError(error);
+	}
+}
+
+function handleError(error) {
+	if (error.message.includes("InsufficientAmount")) {
 		mintResult.textContent =
-			"Couldn't mint your tokens , check the console for more info!";
+			"Couldn't mint your tokens, you need to send more ETH!";
+	} else if (error.message.includes("TotalSupplyReached")) {
+		mintResult.textContent = "Couldn't mint your tokens, max supply reached";
+	} else if (error.message.includes("MaxMintableReached")) {
+		mintResult.textContent =
+			"Couldn't mint your tokens, quantity exceeds the mint limit!";
+	} else if (error.message.includes("OnlyWhitelistMembersAllowed")) {
+		mintResult.textContent =
+			"Couldn't mint your tokens, you're not in the whitelist!";
+	} else if (error.message.includes("NFT__BlackListMembersArentAllowed")) {
+		mintResult.textContent =
+			"Couldn't mint your tokens, your account is blacklisted!";
+	} else if (error.message.includes("User denied transaction signature")) {
+		mintResult.textContent = "User denied transaction signature";
+	} else {
+		mintResult.textContent = "Couldn't mint your tokens, something went wrong";
 	}
 }
